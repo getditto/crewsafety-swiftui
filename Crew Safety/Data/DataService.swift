@@ -91,8 +91,7 @@ class DataService {
                         "title": _id
                     ], isDefault: true)
                     // let's just make some random items
-                    let randomNumberOfPositionItems = Int.random(in: 5..<40)
-                    for j in 0..<randomNumberOfPositionItems {
+                    for j in 0..<50 {
                         let fakeItemId = "\(_id)\(j)"
                         try! trx["checkPositionItems"].insert([
                             "_id": fakeItemId,

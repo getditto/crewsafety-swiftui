@@ -7,7 +7,7 @@ target 'Crew Safety' do
 
   # Pods for Crew Safety
   pod 'DittoSwift', '>=1.0.10'
-  pod 'CombineDitto'
+  pod "CombineDitto", "0.1.4"
 
   # We use fakery to add some fake data
   pod 'Fakery'

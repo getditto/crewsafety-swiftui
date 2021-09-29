@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DittoSwift
+import Combine
 import CombineDitto
 
 struct RemotePeersPage: View {
@@ -14,13 +15,12 @@ struct RemotePeersPage: View {
     class ViewModel: ObservableObject {
         @Published var remotePeers = [DittoRemotePeer]()
 
-        var handler: DittoPeersObserver?
+        var cancellables = Set<AnyCancellable>()
 
         init() {
-            handler = DataService.shared.ditto
-                .observePeers { [weak self] peers in
-                    self?.remotePeers = peers
-                }
+            DataService.shared.ditto.remotePeersPublisher()
+                .assign(to: \.remotePeers, on: self)
+                .store(in: &cancellables)
         }
     }
 
@@ -39,6 +39,7 @@ struct RemotePeersPage: View {
                     }
                 }
             }
+            .navigationBarTitle("Remote Peers")
             .toolbar {
                 Button("Close") {
                     dismiss()
