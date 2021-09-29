@@ -99,7 +99,7 @@ class DataService {
 
             checkPositionItems?.forEach({ dictionary in
                 let _id = dictionary["_id"] as! String
-                if trx["checkPositions"].findByID(_id).exec() == nil {
+                if trx["checkPositionItems"].findByID(_id).exec() == nil {
                     try! trx["checkPositionItems"].insert(dictionary, isDefault: true)
                 }
             })
