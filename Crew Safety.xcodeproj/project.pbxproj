@@ -22,6 +22,8 @@
 		2D178C1C27017780001BFC22 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D178C1B27017780001BFC22 /* DataService.swift */; };
 		2D178C1E2701799D001BFC22 /* CheckPositionWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D178C1D2701799D001BFC22 /* CheckPositionWithItems.swift */; };
 		2D178C21270189A0001BFC22 /* RemotePeersPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D178C20270189A0001BFC22 /* RemotePeersPage.swift */; };
+		2D94B9282704126300E512E3 /* fake-check-positions.json in Resources */ = {isa = PBXBuildFile; fileRef = 2D94B9262704126300E512E3 /* fake-check-positions.json */; };
+		2D94B9292704126300E512E3 /* fake-check-position-items.json in Resources */ = {isa = PBXBuildFile; fileRef = 2D94B9272704126300E512E3 /* fake-check-position-items.json */; };
 		396E57DBD0F43513B3E9C844 /* Pods_Crew_Safety.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53BDADC142F67193FD4D4A55 /* Pods_Crew_Safety.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +45,8 @@
 		2D178C1B27017780001BFC22 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		2D178C1D2701799D001BFC22 /* CheckPositionWithItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPositionWithItems.swift; sourceTree = "<group>"; };
 		2D178C20270189A0001BFC22 /* RemotePeersPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePeersPage.swift; sourceTree = "<group>"; };
+		2D94B9262704126300E512E3 /* fake-check-positions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "fake-check-positions.json"; sourceTree = "<group>"; };
+		2D94B9272704126300E512E3 /* fake-check-position-items.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "fake-check-position-items.json"; sourceTree = "<group>"; };
 		5078E65E7EFEB6F7D329C7ED /* Pods-Crew Safety.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Crew Safety.debug.xcconfig"; path = "Target Support Files/Pods-Crew Safety/Pods-Crew Safety.debug.xcconfig"; sourceTree = "<group>"; };
 		53BDADC142F67193FD4D4A55 /* Pods_Crew_Safety.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Crew_Safety.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F535D37C18FF63119CA117F2 /* Pods-Crew Safety.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Crew Safety.release.xcconfig"; path = "Target Support Files/Pods-Crew Safety/Pods-Crew Safety.release.xcconfig"; sourceTree = "<group>"; };
@@ -125,6 +129,8 @@
 		2D178C132701752B001BFC22 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				2D94B9272704126300E512E3 /* fake-check-position-items.json */,
+				2D94B9262704126300E512E3 /* fake-check-positions.json */,
 				2D178C16270176E5001BFC22 /* Models */,
 				2D178C1B27017780001BFC22 /* DataService.swift */,
 			);
@@ -226,7 +232,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D94B9282704126300E512E3 /* fake-check-positions.json in Resources */,
 				2D178C0127014F04001BFC22 /* LaunchScreen.storyboard in Resources */,
+				2D94B9292704126300E512E3 /* fake-check-position-items.json in Resources */,
 				2D178BFE27014F04001BFC22 /* Assets.xcassets in Resources */,
 				2D178BFC27014F02001BFC22 /* Main.storyboard in Resources */,
 			);

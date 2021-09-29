@@ -8,10 +8,25 @@
 import Foundation
 import DittoSwift
 
-enum CheckPositionItemStatus: Int, CaseIterable {
+enum CheckPositionItemStatus: Int, CaseIterable, Identifiable {
     case none = 0
     case good = 1
     case bad = 2
+
+    var id: Int {
+        return self.rawValue
+    }
+
+    var friendlyName: String {
+        switch self {
+        case .bad:
+            return "bad"
+        case .good:
+            return "good"
+        case .none:
+            return "none"
+        }
+    }
 }
 
 enum CheckStyle: String, CaseIterable {

@@ -55,13 +55,16 @@ class DataService {
             .eraseToAnyPublisher()
     }
 
-    func changeStatusFor(checkPositionItemId: String, status: CheckPositionItemStatus) {
-        ditto
-            .store["checkPositionItems"]
-            .findByID(checkPositionItemId)
-            .update({ mutableDoc in
-                mutableDoc?["status"].set(status.rawValue)
-            })
+    func changeStatusFor(checkPositionItemIds: [String], status: CheckPositionItemStatus) {
+
+        ditto.store.write { trx in
+            checkPositionItemIds.forEach { _id in
+                trx["checkPositionItems"].findByID(_id)
+                    .update({ mutableDoc in
+                        mutableDoc?["status"].set(status.rawValue)
+                    })
+            }
+        }
     }
 
 
@@ -82,29 +85,39 @@ class DataService {
 
 
     func bootstrapWithFakeData() {
-        ditto.store.write { [unowned self] trx in
-            for i in 1..<10 {
-                for d in ["L", "R"] {
-                    let _id: String = "FB \(i)\(d)"
-                    try! trx["checkPositions"].insert([
-                        "_id": _id,
-                        "title": _id
-                    ], isDefault: true)
-                    // let's just make some random items
-                    for j in 0..<50 {
-                        let fakeItemId = "\(_id)\(j)"
-                        try! trx["checkPositionItems"].insert([
-                            "_id": fakeItemId,
-                            "checkPositionId": _id,
-                            "title": faker.lorem.words(amount: 2),
-                            "details": faker.lorem.paragraph(),
-                            "style": CheckStyle.allCases.randomElement()!.rawValue,
-                            "status": CheckPositionItemStatus.allCases.randomElement()!.rawValue
-                        ], isDefault: true)
-                    }
+
+        let checkPositions = readLocalJSONFile(forName: "fake-check-positions")
+        let checkPositionItems = readLocalJSONFile(forName: "fake-check-position-items")
+
+        ditto.store.write { trx in
+            checkPositions?.forEach({ dictionary in
+                let _id = dictionary["_id"] as! String
+                if trx["checkPositions"].findByID(_id).exec() == nil {
+                    try! trx["checkPositions"].insert(dictionary, isDefault: true)
                 }
-            }
+            })
+
+            checkPositionItems?.forEach({ dictionary in
+                let _id = dictionary["_id"] as! String
+                if trx["checkPositionItems"].findByID(_id).exec() == nil {
+                    try! trx["checkPositionItems"].insert(dictionary, isDefault: true)
+                }
+            })
         }
+    }
+
+    func readLocalJSONFile(forName name: String) -> [[String: Any]]? {
+        do {
+            if let filePath = Bundle.main.path(forResource: name, ofType: "json") {
+                let fileUrl = URL(fileURLWithPath: filePath)
+                let data = try Data(contentsOf: fileUrl)
+                let arrayOfDictionaries = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
+                return arrayOfDictionaries
+            }
+        } catch {
+            print("error: \(error)")
+        }
+        return nil
     }
 
 }
