@@ -89,8 +89,7 @@ class DataService {
         let checkPositions = readLocalJSONFile(forName: "fake-check-positions")
         let checkPositionItems = readLocalJSONFile(forName: "fake-check-position-items")
 
-        ditto.store.write { [unowned self] trx in
-
+        ditto.store.write { trx in
             checkPositions?.forEach({ dictionary in
                 try! trx["checkPositions"].insert(dictionary, isDefault: true)
             })
