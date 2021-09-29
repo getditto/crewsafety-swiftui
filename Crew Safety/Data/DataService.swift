@@ -91,11 +91,17 @@ class DataService {
 
         ditto.store.write { trx in
             checkPositions?.forEach({ dictionary in
-                try! trx["checkPositions"].insert(dictionary, isDefault: true)
+                let _id = dictionary["_id"] as! String
+                if trx["checkPositions"].findByID(_id).exec() == nil {
+                    try! trx["checkPositions"].insert(dictionary, isDefault: true)
+                }
             })
 
             checkPositionItems?.forEach({ dictionary in
-                try! trx["checkPositionItems"].insert(dictionary, isDefault: true)
+                let _id = dictionary["_id"] as! String
+                if trx["checkPositions"].findByID(_id).exec() == nil {
+                    try! trx["checkPositionItems"].insert(dictionary, isDefault: true)
+                }
             })
         }
     }
