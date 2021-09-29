@@ -55,13 +55,16 @@ class DataService {
             .eraseToAnyPublisher()
     }
 
-    func changeStatusFor(checkPositionItemId: String, status: CheckPositionItemStatus) {
-        ditto
-            .store["checkPositionItems"]
-            .findByID(checkPositionItemId)
-            .update({ mutableDoc in
-                mutableDoc?["status"].set(status.rawValue)
-            })
+    func changeStatusFor(checkPositionItemIds: [String], status: CheckPositionItemStatus) {
+
+        ditto.store.write { trx in
+            checkPositionItemIds.forEach { _id in
+                trx["checkPositionItems"].findByID(_id)
+                    .update({ mutableDoc in
+                        mutableDoc?["status"].set(status.rawValue)
+                    })
+            }
+        }
     }
 
 

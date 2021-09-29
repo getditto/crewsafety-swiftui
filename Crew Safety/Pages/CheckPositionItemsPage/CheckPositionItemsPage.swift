@@ -28,8 +28,13 @@ struct CheckPositionItemsPage: View {
             }
         }
 
-        func changeStatusFor(checkPositionItemId: String, status: CheckPositionItemStatus) {
-            DataService.shared.changeStatusFor(checkPositionItemId: checkPositionItemId, status: status)
+        func changeStatusFor(checkPositionItemIds: [String], status: CheckPositionItemStatus) {
+            DataService.shared.changeStatusFor(checkPositionItemIds: checkPositionItemIds, status: status)
+        }
+
+        func changeAllTo(status: CheckPositionItemStatus) {
+            let statusIds = self.checkPositionItems.map({ $0._id })
+            DataService.shared.changeStatusFor(checkPositionItemIds: statusIds, status: status)
         }
     }
 
@@ -41,12 +46,26 @@ struct CheckPositionItemsPage: View {
             ForEach(viewModel.checkPositionItems, id: \._id) { positionItem in
                 CheckPositionItemListItemView(title: positionItem.title, details: positionItem.details, checkStatus: positionItem.status, style: positionItem.style)
                     .onCheckTapped { newStatus in
-                        viewModel.changeStatusFor(checkPositionItemId: positionItem._id, status: newStatus)
+                        viewModel.changeStatusFor(checkPositionItemIds: [positionItem._id], status: newStatus)
                     }
             }
         }
         .onAppear(perform: {
             viewModel.checkPositionId = self.checkPositionId
+        })
+        .toolbar(content: {
+            Menu {
+                ForEach(CheckPositionItemStatus.allCases) { status in
+                    Button(action: {
+                        viewModel.changeAllTo(status: status)
+                    }) {
+                        Text("Mark all as \(status.friendlyName)")
+                    }
+                }
+            } label: {
+                Label("Change All", systemImage: "pencil")
+            }
+
         })
         .navigationTitle("Checklist")
     }
