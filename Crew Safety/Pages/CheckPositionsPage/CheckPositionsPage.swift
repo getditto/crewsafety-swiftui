@@ -47,7 +47,7 @@ struct CheckPositionsPage: View {
                     }
                 }
             }
-            .navigationTitle("Check Positions")
+            .navigationTitle("Check Positions \(viewModel.checkPositionsWithItems.count)")
             .listStyle(.plain)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {

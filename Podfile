@@ -6,8 +6,8 @@ target 'Crew Safety' do
   use_frameworks!
 
   # Pods for Crew Safety
-  pod 'DittoSwift', '>=1.0.10'
-  pod "CombineDitto", "0.1.4"
+  pod 'DittoSwift', '>=1.0.16'
+  pod "CombineDitto", ">=0.1.4"
 
   # We use fakery to add some fake data
   pod 'Fakery'

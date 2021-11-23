@@ -33,9 +33,16 @@ struct RemotePeersPage: View {
                 ForEach(viewModel.remotePeers) { remotePeer in
                     VStack(alignment: .leading) {
                         Text(remotePeer.deviceName)
+                            .font(.title2)
                         if let rssi = remotePeer.rssi {
                             Text("Approximate RSSI \(rssi)")
                         }
+                        ForEach(remotePeer.connections, id: \.self) { connection in
+                            Text(connection)
+                                .font(.subheadline)
+                        }
+
+
                     }
                 }
             }

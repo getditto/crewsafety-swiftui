@@ -22,24 +22,27 @@ class DataService {
 
         /// Checks if the current runtime is in the SwiftUI preview simulator
         let isPreview = ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
-
-        let identity = DittoIdentity.development(appID: isPreview ? "live.ditto.crew-safety-preview" : "live.ditto.crew-safety")
-        ditto = Ditto(identity: identity)
-
-        try! ditto.setLicenseToken("o2d1c2VyX2lkdFVzZXI6IG1heEBkaXR0by5saXZlZmV4cGlyeXgeMjAyMS0xMC0wNFQwNToxNzo0OC4yODQwMjg2MTlaaXNpZ25hdHVyZXhYSUZZc3NtT1hxUEdadFFVRzJhaWRTRnA1R0pUdlRGc0pPRnZlRWJpUEEzSnZxS1Iwc003NldhUUFKb0dBYTdKS1lsY2RKOGkvS1UySG05TDlFd1Y4K0E9PQ==")
-        try! ditto.tryStartSync()
+        ditto = Ditto()
+        if !isPreview {
+            try! ditto.setLicenseToken("o2d1c2VyX2lkeCRmZWNlYTI1Ny04MWQ5LTQxMWMtYWZhMy1mYmQ1Nzk1NTQ0ZGZmZXhwaXJ5eBgyMDIyLTAzLTMxVDIxOjU5OjU5Ljg5NFppc2lnbmF0dXJleFhDV2laU2tzME9MSjF6clR6N1NpR0hNUjQ4WExvY3VxNHBvMTVIY3VKTmxJeEhSdFEyR3BkcjlZZG5JVXFFeFFRNGMvSkJGa1owNEFXZjJQN3diY1B2UT09")
+            try! ditto.tryStartSync()
+        }
         faker = Faker()
     }
 
     var checkPositions: AnyPublisher<[CheckPosition], Never> {
         return ditto.store["checkPositions"].findAll().publisher()
-            .map({ snapshot in return snapshot.documents.map({ CheckPosition(document: $0) }) })
+            .map({ (snapshot) -> [CheckPosition] in
+                return snapshot.documents.compactMap({ try? $0.typed(as: CheckPosition.self).value })
+            })
             .eraseToAnyPublisher()
     }
 
     var checkPositionItems: AnyPublisher<[CheckPositionItem], Never> {
         return ditto.store["checkPositionItems"].findAll().publisher()
-            .map({ snapshot in return snapshot.documents.map({ CheckPositionItem(document: $0) }) })
+            .map({ (snapshot) -> [CheckPositionItem] in
+                return snapshot.documents.compactMap({ try? $0.typed(as: CheckPositionItem.self).value })
+            })
             .eraseToAnyPublisher()
     }
 
@@ -51,12 +54,13 @@ class DataService {
             .store["checkPositionItems"]
             .find("checkPositionId == $args.checkPositionId", args: ["checkPositionId": checkPositionId])
             .publisher()
-            .map({ snapshot in return snapshot.documents.map({ CheckPositionItem(document: $0) }) })
+            .map({ (docs, _) -> [CheckPositionItem] in
+                return docs.compactMap({ doc in try? doc.typed(as: CheckPositionItem.self).value })
+            })
             .eraseToAnyPublisher()
     }
 
     func changeStatusFor(checkPositionItemIds: [String], status: CheckPositionItemStatus) {
-
         ditto.store.write { trx in
             checkPositionItemIds.forEach { _id in
                 trx["checkPositionItems"].findByID(_id)
@@ -92,16 +96,12 @@ class DataService {
         ditto.store.write { trx in
             checkPositions?.forEach({ dictionary in
                 let _id = dictionary["_id"] as! String
-                if trx["checkPositions"].findByID(_id).exec() == nil {
-                    try! trx["checkPositions"].insert(dictionary, isDefault: true)
-                }
+                try! trx["checkPositions"].insert(dictionary, isDefault: true)
             })
 
             checkPositionItems?.forEach({ dictionary in
                 let _id = dictionary["_id"] as! String
-                if trx["checkPositionItems"].findByID(_id).exec() == nil {
-                    try! trx["checkPositionItems"].insert(dictionary, isDefault: true)
-                }
+                try! trx["checkPositionItems"].insert(dictionary, isDefault: true)
             })
         }
     }
