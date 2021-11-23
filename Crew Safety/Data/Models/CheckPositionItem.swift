@@ -8,7 +8,7 @@
 import Foundation
 import DittoSwift
 
-enum CheckPositionItemStatus: Int, CaseIterable, Identifiable {
+enum CheckPositionItemStatus: Int, Codable, CaseIterable, Identifiable {
     case none = 0
     case good = 1
     case bad = 2
@@ -29,27 +29,18 @@ enum CheckPositionItemStatus: Int, CaseIterable, Identifiable {
     }
 }
 
-enum CheckStyle: String, CaseIterable {
+enum CheckStyle: String, Codable, CaseIterable {
     case square = "square"
     case circle = "circle"
     case triangle = "triangle"
 }
 
 
-struct CheckPositionItem {
+struct CheckPositionItem: Codable {
     var _id: String
     var checkPositionId: String
     var title: String
     var details: String
     var status: CheckPositionItemStatus
     var style: CheckStyle
-
-    init(document: DittoDocument) {
-        self._id = document["_id"].stringValue
-        self.title = document["title"].stringValue
-        self.checkPositionId = document["checkPositionId"].stringValue
-        self.details = document["details"].stringValue
-        self.status = CheckPositionItemStatus(rawValue: document["status"].intValue) ?? .none
-        self.style = CheckStyle(rawValue: document["style"].stringValue) ?? .square
-    }
 }

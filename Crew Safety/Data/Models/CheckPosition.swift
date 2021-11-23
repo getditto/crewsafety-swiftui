@@ -8,12 +8,7 @@
 import Foundation
 import DittoSwift
 
-struct CheckPosition {
+struct CheckPosition: Codable {
     var _id: String
     var title: String
-
-    init(document: DittoDocument) {
-        self._id = document["_id"].stringValue
-        self.title = document["title"].stringValue
-    }
 }
